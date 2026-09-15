@@ -1,0 +1,32 @@
+[project]
+name = "that-damn-zero-to-hero"
+version = "0.1.0"
+requires-python = ">=3.10,<3.14"
+
+dependencies = [
+    "torch==2.9.1",
+    "tiktoken>=0.11.0",
+    "tokenizers>=0.22.0",
+    "wandb>=0.21.3",
+    "datasets>=4.0.0",
+    "jupyterlab",
+    "ipykernel>=7.1.0",
+    "matplotlib>=3.10.8",
+    "numpy",
+    "graphviz>=0.20.3",
+]
+
+# PyPI is the default index
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple"
+default = true
+
+# PyTorch CPU index (used only for torch)
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+
+# Pin torch to the CPU index
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }

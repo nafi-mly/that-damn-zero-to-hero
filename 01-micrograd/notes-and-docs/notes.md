@@ -12,3 +12,5 @@
         __getitem__ → triggered by ([]), 
         __call__    → triggered by (()), etc.
 4. that Value class is extremely useful when we have a complex data structure, say like n-dimension vector
+5. casually crashed out because i didnt know how the fck venv actually work (no, i am not talking about that basic venv, i am talking about the engine behind it)
+ 
