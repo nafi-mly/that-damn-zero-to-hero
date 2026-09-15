@@ -13,4 +13,4 @@
         __call__    → triggered by (()), etc.
 4. that Value class is extremely useful when we have a complex data structure, say like n-dimension vector
 5. casually crashed out because i didnt know how the fck venv actually work (no, i am not talking about that basic venv, i am talking about the engine behind it)
- 
+6. about derivaties, this means that we just need to do two multiplication for each node because we got the partial derivation from the n+1 laeyer, so... to backprop for the entire NN, it's ~2 x params. If we do this for N of time, it will be... oh shoot. But i know that we aint calculate the whole things.
