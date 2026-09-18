@@ -19,4 +19,4 @@ For every single video:
 
 **3. PASS 3 (The Solo Run):** Close everything. Grab a pen and paper. Sketch out the architecture, then **BUILD THAT DAMN THING FROM SCRATCH. NEVER EVER COPY A SINGLE LINE.** Peek at your notes only if you've been stuck for 10+ minutes. Your code will probably look wildly different from the original and 10x uglier than you'd like (that's the entire point). Go check how disgusting my code is in `/from-scratch.ipynb` if you need proof.
 
-GLHF ;)
+Oh, go watch my git history if you want prove that this is a modular step by step tutorial, GLHF ;)
