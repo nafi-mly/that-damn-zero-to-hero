@@ -65,3 +65,53 @@ q_rotated = q_rotated_paired.reshape(1, 2, 4)
 
 print("\nq_rotated shape:", q_rotated.shape)
 print("q_rotated values:\n", q_rotated.round())
+
+
+
+def precompute_freqs_cis(dim:int, seq_len:int, tetha: float = 10000.0) -> torch.Tensor :
+    freqs = 1.0 / (tetha ** (torch.arange(0, dim, 2)[: (dim // 2)].float() / dim))
+    t = torch.arange(seq_len, dtype=torch.float32)
+    freqs = torch.outer(t, freqs) 
+
+    freqs_cis = torch.polar(torch.ones_like(freqs), freqs)
+    return freqs_cis
+
+
+def apply_rope(x: torch.Tensor, freqs_cis: torch.Tensor) -> torch.Tensor:
+    x_pairs = x.float().reshape(*x.shape[:-1], -1, 2)
+    x_complex = torch.view_as_complex(x_pairs)
+
+    freqs_cis = freqs_cis.view(1, x.shape[1], 1, -1) 
+    x_rotated_complex = x_complex * freqs_cis
+    
+    x_rotated_pairs = torch.view_as_real(x_rotated_complex)
+    
+    x_out = x_rotated_pairs.reshape(*x.shape)
+
+    return x_out.type_as(x)
+
+# Parameters
+batch_size, seq_len, num_heads, head_dim = 2, 8, 4, 64
+
+# Generate random input vector x
+x = torch.randn(batch_size, seq_len, num_heads, head_dim)
+
+# Precompute rotation frequencies
+freqs_cis = precompute_freqs_cis(dim=head_dim, seq_len=seq_len)
+
+# Apply RoPE
+x_rotated = apply_rope(x, freqs_cis)
+
+# Verification 1: Shape check
+assert x_rotated.shape == x.shape, f"Expected shape {x.shape}, got {x_rotated.shape}"
+
+# Verification 2: Magnitude check (Geometric length MUST be invariant!)
+orig_norm = torch.norm(x, dim=-1)
+rotated_norm = torch.norm(x_rotated, dim=-1)
+max_diff = (orig_norm - rotated_norm).abs().max().item()
+
+print(f"Shape check passed: {x_rotated.shape}")
+print(f"Max length deviation after rotation: {max_diff:.8f}")
+
+if max_diff < 1e-5:
+    print("SUCCESS: RoPE accurately rotated vectors while preserving 100% of semantic magnitude!")
